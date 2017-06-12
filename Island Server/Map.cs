@@ -32,13 +32,12 @@ namespace IslandServer
         public int[][] Tiles { get; set; }
         public int[][] Items { get; set; }
 
-        public Map(int width, int height)
+        public Map()
         {
-            Width = width;
-            Height = height;
+            Width = 300;
+            Height = 300;
             Octave = 8;
             Persistance = 0.6;
-            Tiles = new int[height][];
             Seed = Seed == 0 ? new Random().Next(1, 10000) : Seed;
         }
 
@@ -118,7 +117,7 @@ namespace IslandServer
 
         public void Generate()
         {
-
+            Tiles = new int[Height][];
             double MaxWidth = Width * 0.45 - 10; //calculates the max width of the island so that it doesn't touch the edges
 
             double[][] baseNoise = GenerateWhiteNoise(Width, Height, Seed);

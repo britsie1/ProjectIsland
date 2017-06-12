@@ -14,7 +14,7 @@ namespace IslandServer
     [HubName("ServerHub")]
     public class ServerHub : Hub
     {
-        Game game = Form1.game;
+        //Game game = Form1.game;
         public int TurnTimeout = 3; //time before player turns time out
         public int TurnTime = 0; //current time of turn
         public System.Timers.Timer tmrTurn;
@@ -37,7 +37,7 @@ namespace IslandServer
 
         public void Alive(string playerID)
         {
-            game.Players.Where(x => x.ID == Guid.Parse(playerID)).First().Alive = true;
+            Game.Players.Where(x => x.ID == Guid.Parse(playerID)).First().Alive = true;
         }
 
         public object PlayerState(Player player)
@@ -61,36 +61,33 @@ namespace IslandServer
 
         public void Turn()
         {
-            
+
             TurnTime++;
 
-            ExecuteScript("UpdateMap('" +
-                 game.Turn + " (" + (TurnTime) + "s)'," +
-                 Newtonsoft.Json.JsonConvert.SerializeObject(game.Players) +
-                ");");
+            ExecuteScript($"UpdateMap('{ Game.Turn } ({ TurnTime }s)',{ Newtonsoft.Json.JsonConvert.SerializeObject(Game.Players) });");
 
-            if (TurnTime == TurnTimeout || (game.ActionQueue.Count == game.Players.Where(x => x.Alive).Count() && TurnTime == 1 && game.ActionQueue.Count > 0))
+            if (TurnTime == TurnTimeout || (Game.ActionQueue.Count == Game.Players.Where(x => x.Alive).Count() && TurnTime == 1 && Game.ActionQueue.Count > 0))
             {
                 startTurnTime = DateTime.Now;
-                Clients.All.Turn(game.Turn++);
+                Clients.All.Turn(Game.Turn++);
                 TurnTime = 0;
-                game.ActionQueue.Clear();
-                game.Players.ForEach(x => x.Alive = false);
+                Game.ActionQueue.Clear();
+                Game.Players.ForEach(x => x.Alive = false);
             }
             Clients.All.Poll();
         }
 
         public void Spawn(string nickname)
         {
-            if (!game.Started)
+            if (!Game.Started)
             {
-                game.Started = true;
+                Game.Started = true;
                 tmrTurn.Start();
             }
 
             Player player = new Player(nickname);
-            game.Players.Add(player);
-            player.GlobalLocation = game.Spawn();
+            Game.Players.Add(player);
+            player.GlobalLocation = Game.Spawn();
 
             Clients.Caller.Response(PlayerState(player));
             ExecuteScript("UpdateLog('<span style=\"color: #FFFF00;\">" + player.Nickname + "</span> washed up on the shore.');");
@@ -108,7 +105,7 @@ namespace IslandServer
 
         public void DoAction(string action, string location, string playerID)
         {
-            Player player = game.Players.Where(x => x.ID == Guid.Parse(playerID)).FirstOrDefault();
+            Player player = Game.Players.Where(x => x.ID == Guid.Parse(playerID)).FirstOrDefault();
             TimeSpan ts = DateTime.Now - startTurnTime;
             int timeTook = ts.Milliseconds;
             player.LastActionTime = timeTook;
@@ -158,9 +155,9 @@ namespace IslandServer
 
             if (ActionUsesTurn)
             {
-                if (game.ActionQueue.Where(x => x.Key == player.ID).Count() == 0)
+                if (Game.ActionQueue.Where(x => x.Key == player.ID).Count() == 0)
                 {
-                    game.ActionQueue.Add(new KeyValuePair<Guid, Action>(player.ID, new Action(action, location, timeTook)));
+                    Game.ActionQueue.Add(new KeyValuePair<Guid, Action>(player.ID, new Action(action, location, timeTook)));
                     player.LastActionStatus = ActionStatus.Valid;
                 }
                 else

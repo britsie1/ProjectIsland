@@ -7,39 +7,32 @@ using System.Threading.Tasks;
 
 namespace IslandServer
 {
-    public class Game
+    public static class Game
     {
-        public int Turn { get; set; }
-        public List<KeyValuePair<Guid, Action>> ActionQueue { get; set; }
+        public static int Turn { get; set; }
+        public static List<KeyValuePair<Guid, Action>> ActionQueue { get; set; }
 
-        public int MapWidth { get; set; }
-        public int MapHeight { get; set; }
-        public int MapSeed { get; set; }
-        public int[][] MapTiles { get; set; }
-        public List<Player> Players { get; set; }
-        public bool Started = false;
+        public static List<Player> Players { get; set; }
+        public static bool Started = false;
 
-        public Game(int mapWidth, int mapHeight, int mapSeed)
-        {
-            Players = new List<Player>();
-            ActionQueue = new List<KeyValuePair<Guid, Action>>();
+        public static Map Map = new Map();
 
-            MapHeight = mapHeight;
-            MapWidth = mapWidth;
-            Map map = new Map(mapWidth, mapHeight);
-            map.Seed = mapSeed;
-            map.Generate();
-            MapTiles = map.Tiles;
-        }
+        //public Game(int mapWidth, int mapHeight, int mapSeed)
+        //{
+        //    Players = new List<Player>();
+        //    ActionQueue = new List<KeyValuePair<Guid, Action>>();
+        //    Map Map = new Map(mapWidth, mapHeight);
+        //    Map.Seed = mapSeed;
+        //}
 
-        public List<Point> GetSpawnLocations()
+        public static List<Point> GetSpawnLocations()
         {
             List<Point> spawnPoints = new List<Point>();
-            for (int y = 0; y < MapHeight; y++)
+            for (int y = 0; y < Map.Height; y++)
             {
-                for (int x = 0; x < MapWidth; x++)
+                for (int x = 0; x < Map.Width; x++)
                 {
-                    if (MapTiles[y][x] == (int)Tile.Spawn)
+                    if (Map.Tiles[y][x] == (int)Tile.Spawn)
                     {
                         spawnPoints.Add(new Point(x, y));
                         //TODO:: Check if square is empty of item and/or player
@@ -49,10 +42,10 @@ namespace IslandServer
             return spawnPoints;
         }
 
-        public Point Spawn()
+        public static Point Spawn()
         {
             Random random = new Random();
-            int location = random.Next(0, MapTiles.Length - 1);
+            int location = random.Next(0, Map.Tiles.Length - 1);
             return GetSpawnLocations()[location];
         }
     }

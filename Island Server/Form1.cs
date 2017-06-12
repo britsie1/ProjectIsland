@@ -3,10 +3,8 @@ using CefSharp.WinForms;
 using Microsoft.Owin.Hosting;
 using NetFwTypeLib;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace IslandServer
@@ -16,7 +14,6 @@ namespace IslandServer
         public static ChromiumWebBrowser chromeBrowser;
         public string HostPort = "8080";
         public string HostURL = @"http://localhost/";
-        public static Game game;
 
         public static string GetLocalIPAddress()
         {
@@ -69,7 +66,7 @@ namespace IslandServer
             chromeBrowser.MenuHandler = new CustomMenuHandler();
             // Add it to the form and fill it to the form window.
             pnlBrowser.Controls.Add(chromeBrowser);
-            chromeBrowser.Dock = DockStyle.Fill;            
+            chromeBrowser.Dock = DockStyle.Fill;
             chromeBrowser.LoadingStateChanged += ChromeBrowser_LoadingStateChanged;
         }
 
@@ -79,6 +76,7 @@ namespace IslandServer
             {
                 Invoke(new ControlStringConsumer(SetText), new object[] { "Browser loaded." });
                 Invoke(new ControlBoolConsumer(EnableControl), new object[] { btnHostServer, true });
+                Invoke(new ControlBoolConsumer(EnableControl), new object[] { menuStrip1, true });
             }
         }
 
@@ -115,19 +113,19 @@ namespace IslandServer
                 WebApp.Start<Startup>(HostURL);
                 if (domainName != "")
                 {
-                    WriteLog("Server hosted on: " + "http://" + machineName + "." + domainName + ":" + HostPort);
+                    WriteLog($"Server hosted on: http://{ machineName }.{ domainName }:{ HostPort }");
                 }
                 else
                 {
-                    WriteLog("Server hosted on: " + "http://" + machineName + ":" + HostPort);
+                    WriteLog($"Server hosted on: http://{ machineName }:{ HostPort }");
                 }
 
                 btnHostServer.Text = "Stop Server";
                 tbxWatchURL.Enabled = false;
                 btnWatchServer.Enabled = false;
+                Game.Map.Generate();
 
-                game = new Game(300, 300, 0); //seed 0 for random
-                chromeBrowser.GetMainFrame().ExecuteJavaScriptAsync("DrawMap(" + Newtonsoft.Json.JsonConvert.SerializeObject(game.MapTiles) + ");");
+                chromeBrowser.GetMainFrame().ExecuteJavaScriptAsync($"DrawMap({ Newtonsoft.Json.JsonConvert.SerializeObject(Game.Map.Tiles) });");
             }
             catch (Exception ex)
             {
@@ -153,6 +151,17 @@ namespace IslandServer
         private void btnHostServer_Click(object sender, EventArgs e)
         {
             StartServer();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void serverSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmServerSettings settings = new frmServerSettings();
+            settings.ShowDialog();
         }
     }
 }
