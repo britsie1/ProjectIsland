@@ -126,13 +126,23 @@
             // 
             this.nudSeed.Location = new System.Drawing.Point(50, 13);
             this.nudSeed.Maximum = new decimal(new int[] {
-            1000,
+            9999,
+            0,
+            0,
+            0});
+            this.nudSeed.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
             this.nudSeed.Name = "nudSeed";
             this.nudSeed.Size = new System.Drawing.Size(156, 20);
             this.nudSeed.TabIndex = 4;
+            this.nudSeed.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // frmServerSettings
             // 
@@ -153,6 +163,7 @@
             this.Name = "frmServerSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
+            this.Load += new System.EventHandler(this.frmServerSettings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nudHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSeed)).EndInit();
