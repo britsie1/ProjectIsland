@@ -15,7 +15,7 @@ namespace IslandServer
         public static List<Player> Players { get; set; }
         public static bool Started = false;
 
-        public static Map Map = new Map();
+        public static Map Map = new Map(300, 300, 0);
 
         //public Game(int mapWidth, int mapHeight, int mapSeed)
         //{

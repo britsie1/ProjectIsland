@@ -32,13 +32,13 @@ namespace IslandServer
         public int[][] Tiles { get; set; }
         public int[][] Items { get; set; }
 
-        public Map()
+        public Map(int width, int height, int seed)
         {
-            Width = 300;
-            Height = 300;
+            Width = width;
+            Height = height;
             Octave = 8;
             Persistance = 0.6;
-            Seed = Seed == 0 ? new Random().Next(1, 10000) : Seed;
+            Seed = Seed == 0 ? new Random().Next(1, 10000) : seed;
         }
 
         private double DistanceSquared(int x, int y, int width, int height)

@@ -23,5 +23,12 @@ namespace IslandServer
         {
             Hide();
         }
+
+        private void frmServerSettings_Load(object sender, EventArgs e)
+        {
+            nudHeight.Value = Game.Map.Height;
+            nudWidth.Value = Game.Map.Width;
+            nudSeed.Value = Game.Map.Seed;
+        }
     }
 }

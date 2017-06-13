@@ -148,11 +148,6 @@ namespace IslandServer
             firewallPolicy.Rules.Remove("Island Server");
         }
 
-        private void btnHostServer_Click(object sender, EventArgs e)
-        {
-            StartServer();
-        }
-
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -162,6 +157,23 @@ namespace IslandServer
         {
             frmServerSettings settings = new frmServerSettings();
             settings.ShowDialog();
+        }
+
+        private void fullScreenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormBorderStyle = FormBorderStyle.None;
+            WindowState = FormWindowState.Maximized;
+        }
+
+        private void windowedModeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Normal;
+            FormBorderStyle = FormBorderStyle.Sizable;
+        }
+
+        private void btnHostServer_Click_1(object sender, EventArgs e)
+        {
+            StartServer();
         }
     }
 }
