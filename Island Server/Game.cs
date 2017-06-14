@@ -9,21 +9,13 @@ namespace IslandServer
 {
     public static class Game
     {
-        public static int Turn { get; set; }
-        public static List<KeyValuePair<Guid, Action>> ActionQueue { get; set; }
+        public static int Turn;
+        public static List<KeyValuePair<Guid, Action>> ActionQueue = new List<KeyValuePair<Guid, Action>>();
 
-        public static List<Player> Players { get; set; }
+        public static List<Player> Players = new List<Player>();
         public static bool Started = false;
 
         public static Map Map = new Map(300, 300, 0);
-
-        //public Game(int mapWidth, int mapHeight, int mapSeed)
-        //{
-        //    Players = new List<Player>();
-        //    ActionQueue = new List<KeyValuePair<Guid, Action>>();
-        //    Map Map = new Map(mapWidth, mapHeight);
-        //    Map.Seed = mapSeed;
-        //}
 
         public static List<Point> GetSpawnLocations()
         {
