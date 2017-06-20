@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace IslandServer.Properties {
+namespace GameServer.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace IslandServer.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IslandServer.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GameServer.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,33 +62,28 @@ namespace IslandServer.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
-        ///	&lt;head&gt;
-        ///		&lt;style&gt;
-        ///			body{
-        ///				margin:0;
-        ///				
-        ///				background-color: #142952;
-        ///			}
-        ///		&lt;/style&gt;
-        ///	    &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-        ///		&lt;script&gt;
-        ///			var canvas, context;
+        ///&lt;head&gt;
+        ///    &lt;style&gt;
+        ///        body {
+        ///            margin: 0;
+        ///            font-family: Arial;
+        ///            font-size: 12px;
+        ///            background-color: #142952;
+        ///            -moz-user-select: none;
+        ///            -webkit-user-select: none;
+        ///            -ms-user-select: none;
+        ///            user-select: none;
+        ///            
+        ///        }
         ///
-        ///			function GetTileColor(i)
-        ///			{
-        ///				switch(i)
-        ///				{
-        ///					case 0:
-        ///						return &apos;#142952&apos;;
-        ///					break;
-        ///					case 1:
-        ///						return &apos;#214485&apos;;
-        ///					break;
-        ///					case 2:
-        ///						return &apos;#2957AD&apos;;
-        ///					break;
-        ///					case 3:
-        ///						return &apos;#2957A [rest of string was truncated]&quot;;.
+        ///        .container {
+        ///            position: fixed;
+        ///            overflow: hidden;
+        ///            padding:5px;
+        ///        }
+        ///
+        ///        .container-Body {
+        ///            color:  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string index {
             get {

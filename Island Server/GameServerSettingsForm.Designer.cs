@@ -1,6 +1,6 @@
-﻿namespace IslandServer
+﻿namespace GameServer
 {
-    partial class frmServerSettings
+    partial class GameServerSettingsForm
     {
         /// <summary>
         /// Required designer variable.

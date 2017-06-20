@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IslandServer
+namespace GameServer
 {
     public static class Game
     {
@@ -20,11 +20,11 @@ namespace IslandServer
         public static List<Point> GetSpawnLocations()
         {
             List<Point> spawnPoints = new List<Point>();
-            for (int y = 0; y < Map.Height; y++)
-            {
                 for (int x = 0; x < Map.Width; x++)
+            {
+            for (int y = 0; y < Map.Height; y++)
                 {
-                    if (Map.Tiles[y][x] == (int)Tile.Spawn)
+                    if (Map.Tiles[x, y].Type == TileType.Spawn)
                     {
                         spawnPoints.Add(new Point(x, y));
                         //TODO:: Check if square is empty of item and/or player
