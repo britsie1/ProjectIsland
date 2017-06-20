@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace IslandServer
+namespace GameServer
 {
-    public partial class frmServerSettings : Form
+    public partial class GameServerSettingsForm : Form
     {
-        public frmServerSettings()
+        public GameServerSettingsForm()
         {
             InitializeComponent();
         }

@@ -1,6 +1,6 @@
-﻿namespace IslandServer
+﻿namespace GameServer
 {
-    partial class Form1
+    partial class GameServerForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,92 +28,92 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.serverSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fullScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.windowedModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMain = new System.Windows.Forms.MenuStrip();
+            this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuView = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuFullScreen = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuWindowed = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pnlBrowser = new System.Windows.Forms.Panel();
             this.tbxWatchURL = new System.Windows.Forms.TextBox();
             this.btnWatchServer = new System.Windows.Forms.Button();
             this.btnHostServer = new System.Windows.Forms.Button();
             this.tbxLog = new System.Windows.Forms.TextBox();
-            this.menuStrip1.SuspendLayout();
+            this.mnuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // mnuMain
             // 
-            this.menuStrip1.Enabled = false;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.editToolStripMenuItem,
-            this.viewToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(784, 24);
-            this.menuStrip1.TabIndex = 5;
-            this.menuStrip1.Text = "menuStrip1";
+            this.mnuMain.Enabled = false;
+            this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuFile,
+            this.mnuEdit,
+            this.mnuView});
+            this.mnuMain.Location = new System.Drawing.Point(0, 0);
+            this.mnuMain.Name = "mnuMain";
+            this.mnuMain.Size = new System.Drawing.Size(784, 24);
+            this.mnuMain.TabIndex = 5;
+            this.mnuMain.Text = "menuStrip1";
             // 
-            // fileToolStripMenuItem
+            // mnuFile
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
+            this.mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuExit});
+            this.mnuFile.Name = "mnuFile";
+            this.mnuFile.Size = new System.Drawing.Size(37, 20);
+            this.mnuFile.Text = "File";
             // 
-            // exitToolStripMenuItem
+            // mnuExit
             // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.mnuExit.Name = "mnuExit";
+            this.mnuExit.Size = new System.Drawing.Size(92, 22);
+            this.mnuExit.Text = "Exit";
+            this.mnuExit.Click += new System.EventHandler(this.Exit_Click);
             // 
-            // editToolStripMenuItem
+            // mnuEdit
             // 
-            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.serverSettingsToolStripMenuItem});
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "Edit";
+            this.mnuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuSettings});
+            this.mnuEdit.Name = "mnuEdit";
+            this.mnuEdit.Size = new System.Drawing.Size(39, 20);
+            this.mnuEdit.Text = "Edit";
             // 
-            // serverSettingsToolStripMenuItem
+            // mnuSettings
             // 
-            this.serverSettingsToolStripMenuItem.Name = "serverSettingsToolStripMenuItem";
-            this.serverSettingsToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
-            this.serverSettingsToolStripMenuItem.Text = "Server Settings";
-            this.serverSettingsToolStripMenuItem.Click += new System.EventHandler(this.serverSettingsToolStripMenuItem_Click);
+            this.mnuSettings.Name = "mnuSettings";
+            this.mnuSettings.Size = new System.Drawing.Size(151, 22);
+            this.mnuSettings.Text = "Server Settings";
+            this.mnuSettings.Click += new System.EventHandler(this.SettingsMenuItem_Click);
             // 
-            // viewToolStripMenuItem
+            // mnuView
             // 
-            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fullScreenToolStripMenuItem,
-            this.windowedModeToolStripMenuItem});
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
+            this.mnuView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuFullScreen,
+            this.mnuWindowed});
+            this.mnuView.Name = "mnuView";
+            this.mnuView.Size = new System.Drawing.Size(44, 20);
+            this.mnuView.Text = "View";
             // 
-            // fullScreenToolStripMenuItem
+            // mnuFullScreen
             // 
-            this.fullScreenToolStripMenuItem.Name = "fullScreenToolStripMenuItem";
-            this.fullScreenToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.fullScreenToolStripMenuItem.Text = "Full Screen Mode";
-            this.fullScreenToolStripMenuItem.Click += new System.EventHandler(this.fullScreenToolStripMenuItem_Click);
+            this.mnuFullScreen.Name = "mnuFullScreen";
+            this.mnuFullScreen.Size = new System.Drawing.Size(165, 22);
+            this.mnuFullScreen.Text = "Full Screen Mode";
+            this.mnuFullScreen.Click += new System.EventHandler(this.FullScreen_Click);
             // 
-            // windowedModeToolStripMenuItem
+            // mnuWindowed
             // 
-            this.windowedModeToolStripMenuItem.Name = "windowedModeToolStripMenuItem";
-            this.windowedModeToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.windowedModeToolStripMenuItem.Text = "Windowed Mode";
-            this.windowedModeToolStripMenuItem.Click += new System.EventHandler(this.windowedModeToolStripMenuItem_Click);
+            this.mnuWindowed.Name = "mnuWindowed";
+            this.mnuWindowed.Size = new System.Drawing.Size(165, 22);
+            this.mnuWindowed.Text = "Windowed Mode";
+            this.mnuWindowed.Click += new System.EventHandler(this.Windowed_Click);
             // 
             // splitContainer1
             // 
@@ -176,7 +176,7 @@
             this.btnHostServer.TabIndex = 5;
             this.btnHostServer.Text = "Host Server";
             this.btnHostServer.UseVisualStyleBackColor = true;
-            this.btnHostServer.Click += new System.EventHandler(this.btnHostServer_Click_1);
+            this.btnHostServer.Click += new System.EventHandler(this.HostServer_Click);
             // 
             // tbxLog
             // 
@@ -189,21 +189,21 @@
             this.tbxLog.Size = new System.Drawing.Size(778, 87);
             this.tbxLog.TabIndex = 2;
             // 
-            // Form1
+            // GameServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);
             this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Controls.Add(this.mnuMain);
+            this.MainMenuStrip = this.mnuMain;
+            this.Name = "GameServerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Island Server";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GameServerForm_FormClosing);
+            this.Load += new System.EventHandler(this.GameServerForm_Load);
+            this.mnuMain.ResumeLayout(false);
+            this.mnuMain.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -216,20 +216,20 @@
         }
 
         #endregion
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem serverSettingsToolStripMenuItem;
+        private System.Windows.Forms.MenuStrip mnuMain;
+        private System.Windows.Forms.ToolStripMenuItem mnuFile;
+        private System.Windows.Forms.ToolStripMenuItem mnuExit;
+        private System.Windows.Forms.ToolStripMenuItem mnuEdit;
+        private System.Windows.Forms.ToolStripMenuItem mnuSettings;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Panel pnlBrowser;
         private System.Windows.Forms.TextBox tbxWatchURL;
         private System.Windows.Forms.Button btnWatchServer;
         private System.Windows.Forms.Button btnHostServer;
         private System.Windows.Forms.TextBox tbxLog;
-        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fullScreenToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem windowedModeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuView;
+        private System.Windows.Forms.ToolStripMenuItem mnuFullScreen;
+        private System.Windows.Forms.ToolStripMenuItem mnuWindowed;
     }
 }
 

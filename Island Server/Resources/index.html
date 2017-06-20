@@ -10,21 +10,20 @@
             -webkit-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            
         }
 
         .container {
             position: fixed;
             overflow: hidden;
-            padding:5px;
+            padding: 5px;
         }
 
         .container-Body {
             color: #FFFFFF;
             border-radius: 5px;
             background-color: rgba(0,0,0,0.6);
-            width:100%;
-            height:100%;
+            width: 100%;
+            height: 100%;
         }
 
         .container-Header {
@@ -39,96 +38,193 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
-        var canvas, context, mapWidth, mapHeight, mousedown = false, mouseStartPos, mapDrawn = false;
-        var hiddenCanvas, hiddenContext, offsetX = 0, offsetY = 0, globalOffsetX = 0, globalOffsetY = 0;
+        var radius = 10;
 
-        var global = {
-            zoom: {
-                origin: {
-                    x: null,
-                    y: null,
-                },
-                scale: 1,
-            },
-        };
+        var hidden_canvas;
+        var hidden_context;
+        var map_width;
+        var map_height;
+        var canvas;
+        var context;
 
-        function GetTileColor(i) {
-            switch (i) {
-                case 0:
-                    return '#142952';
-                    break;
-                case 1:
-                    return '#214485';
-                    break;
-                case 2:
-                    return '#2957AD';
-                    break;
-                case 3:
-                    return '#2957AD';
-                    break;
-                case 4:
-                    return '#BDB76B';
-                    break;
-                case 5:
-                    return '#556B2F';
-                    break;
-                case 6:
-                    return '#5E8A00';
-                    break;
-                case 7:
-                    return '#006400';
-                    break;
-                case 8:
-                    return '#705B47';
-                    break;
-                case 9:
-                    return '#808080';
-                    break;
+        var offsetX;
+        var offsetY;
+
+        $(document).ready(function () {
+            hidden_canvas = document.createElement('canvas');
+            hidden_context = hidden_canvas.getContext('2d');
+
+            canvas = $("#canvas");
+            context = canvas[0].getContext("2d");
+
+            canvas[0].width = window.innerWidth;
+            canvas[0].height = window.innerHeight;
+
+            trackTransforms(context);
+
+            var lastX = canvas[0].width / 2, lastY = canvas[0].height / 2;
+            var dragStart, dragged;
+            var scaleFactor = 1.1;
+
+            var zoom = function (clicks) {
+                var pt = context.transformedPoint(lastX, lastY);
+                context.translate(pt.x, pt.y);
+                var factor = Math.pow(scaleFactor, clicks);
+                context.scale(factor, factor);
+                context.translate(-pt.x, -pt.y);
+                RedrawMap();
             }
+            var handleScroll = function (evt) {
+                var delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.detail ? -evt.detail : 0;
+                if (delta) zoom(delta);
+                return evt.preventDefault() && false;
+            };
+
+            canvas[0].addEventListener('mousedown', function (evt) {
+                document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
+                lastX = evt.offsetX || (evt.pageX - canvas[0].offsetLeft);
+                lastY = evt.offsetY || (evt.pageY - canvas[0].offsetTop);
+                dragStart = context.transformedPoint(lastX, lastY);
+                dragged = false;
+            }, false);
+            canvas[0].addEventListener('mousemove', function (evt) {
+                lastX = evt.offsetX || (evt.pageX - canvas[0].offsetLeft);
+                lastY = evt.offsetY || (evt.pageY - canvas[0].offsetTop);
+                dragged = true;
+                if (dragStart) {
+                    var pt = context.transformedPoint(lastX, lastY);
+                    context.translate(pt.x - dragStart.x, pt.y - dragStart.y);
+                    RedrawMap();
+                }
+            }, false);
+            canvas[0].addEventListener('mouseup', function (evt) {
+                dragStart = null;
+                if (!dragged) zoom(evt.shiftKey ? -1 : 1);
+            }, false);
+            canvas[0].addEventListener('DOMMouseScroll', handleScroll, false);
+            canvas[0].addEventListener('mousewheel', handleScroll, false);
+
+            window.addEventListener('resize', onWindowResize, false);
+
+            $(".container").resizable().draggable({ snap: ".container", handle: ".container-Header", containment: "body", scroll: false, snapMode: "outer" });
+        });
+
+        function DrawMap(map) {
+            map_width = map.Width * (radius * 1.5);
+            map_height = map.Height * (radius * 1.8);
+
+            hidden_canvas.width = map_height;
+            hidden_canvas.height = map_height;
+
+            var relative_height = Math.sqrt(Math.pow(radius, 2) - Math.pow(radius / 2, 2));
+            var pos_x = 0;
+            var pos_y = 0;
+
+            for (var x = 0; x < map.Width; x++) {
+                for (var y = 0; y < map.Height; y++) {
+                    pos_x = radius + (x * radius) + (x * (radius / 2));
+                    pos_y = (y * (2 * relative_height)) + relative_height + ((x % 2 == 0) ? 0 : relative_height);
+
+                    Polygon(hidden_context, pos_x, pos_y, radius, 6, map.Tiles[x][y].Colour);
+                    hidden_context.stroke();
+                }
+            }
+
+            offsetX = parseInt(window.innerWidth / 2) - (map_width / 2);
+            offsetY = parseInt(window.innerHeight / 2) - (map_height / 2);
+
+            context.drawImage(hidden_canvas, offsetX, offsetY);
+        }
+        function RedrawMap() {
+            var p1 = context.transformedPoint(0, 0);
+            var p2 = context.transformedPoint(canvas[0].width, canvas[0].height);
+
+            context.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+            context.drawImage(hidden_canvas, offsetX, offsetY);
+        }
+        function Polygon(ctx, x, y, radius, sides, color) {
+            if (sides < 3) return;
+            var a = ((Math.PI * 2) / sides);
+            ctx.beginPath();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.translate(x, y);
+            ctx.moveTo(radius, 0);
+            for (var i = 1; i < sides; i++) {
+                ctx.lineTo(radius * Math.cos(a * i), radius * Math.sin(a * i));
+            }
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.closePath();
         }
 
-        function DrawMap(mapData) {
-            try {
-                if (!mapDrawn) {
-                    var radius = 10;
-                    var height = Math.sqrt(Math.pow(radius, 2) - Math.pow(radius / 2, 2));
-                    var pos_x = 0;
-                    var pos_y = 0;
-                    mapWidth = mapData[0].length * (radius * 1.5);
-                    mapHeight = mapData.length * (radius * 1.7);
-                    hiddenCanvas.height = mapHeight;
-                    hiddenCanvas.width = mapWidth;
-                    canvas.attr('height', window.innerHeight);
-                    canvas.attr('width', window.innerWidth);
+        function trackTransforms(ctx) {
+            var svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+            var xform = svg.createSVGMatrix();
+            ctx.getTransform = function () { return xform; };
 
-                    for (var x = 0; x < mapData.length; x++) {
-                        for (var y = 0; y < mapData[x].length; y++) {
-                            pos_x = radius + (x * radius) + (x * (radius / 2));
-                            pos_y = (y * (2 * height)) + height + ((x % 2 == 0) ? 0 : height);
+            var savedTransforms = [];
+            var save = ctx.save;
+            ctx.save = function () {
+                savedTransforms.push(xform.translate(0, 0));
+                return save.call(ctx);
+            };
+            var restore = ctx.restore;
+            ctx.restore = function () {
+                xform = savedTransforms.pop();
+                return restore.call(ctx);
+            };
 
-                            polygon(hiddenContext, pos_x, pos_y, radius, 6, GetTileColor(mapData[x][y]));
-                            hiddenContext.stroke();
-                        }
-                    }
-
-                    globalOffsetX = offsetX = parseInt(mapWidth / 2) * -1;
-                    globalOffsetY = offsetY = parseInt(mapHeight / 2) * -1;
-                    mapDrawn = true;
-                }
-
-                context.clearRect(0, 0, canvas[0].width, canvas[0].height);
-                context.drawImage(hiddenCanvas, offsetX, offsetY);
+            var scale = ctx.scale;
+            ctx.scale = function (sx, sy) {
+                xform = xform.scaleNonUniform(sx, sy);
+                return scale.call(ctx, sx, sy);
+            };
+            var rotate = ctx.rotate;
+            ctx.rotate = function (radians) {
+                xform = xform.rotate(radians * 180 / Math.PI);
+                return rotate.call(ctx, radians);
+            };
+            var translate = ctx.translate;
+            ctx.translate = function (dx, dy) {
+                xform = xform.translate(dx, dy);
+                return translate.call(ctx, dx, dy);
+            };
+            var transform = ctx.transform;
+            ctx.transform = function (a, b, c, d, e, f) {
+                var m2 = svg.createSVGMatrix();
+                m2.a = a; m2.b = b; m2.c = c; m2.d = d; m2.e = e; m2.f = f;
+                xform = xform.multiply(m2);
+                return transform.call(ctx, a, b, c, d, e, f);
+            };
+            var setTransform = ctx.setTransform;
+            ctx.setTransform = function (a, b, c, d, e, f) {
+                xform.a = a;
+                xform.b = b;
+                xform.c = c;
+                xform.d = d;
+                xform.e = e;
+                xform.f = f;
+                return setTransform.call(ctx, a, b, c, d, e, f);
+            };
+            var pt = svg.createSVGPoint();
+            ctx.transformedPoint = function (x, y) {
+                pt.x = x; pt.y = y;
+                return pt.matrixTransform(xform.inverse());
             }
-            catch (ex) {
-                alert(ex.message);
-            }
+        }
+        function onWindowResize() {
+            canvas[0].height = window.innerHeight;
+            canvas[0].width = window.innerWidth;
+
+            trackTransforms(context);
+
+            RedrawMap();
         }
 
         function UpdateLog(message) {
             $('#logDiv').html($('#logDiv').html() + message + '<br/>');
             $('#logDiv')[0].scrollTop = $('#logDiv')[0].scrollHeight;
         }
-
         function UpdateMap(turn, playerData, itemData) {
             var list = $('#playerList');
             list.html('');
@@ -145,95 +241,6 @@
 
             $('#lblTurn').text(turn);
         }
-
-        function onWindowResize() {
-            canvas.attr('height', window.innerHeight);
-            canvas.attr('width', window.innerWidth);
-            if (mapDrawn) {
-                DrawMap();
-            }
-        } 
-
-        $(document).ready(function () {
-            $(".container").resizable().draggable({ snap: ".container", handle:".container-Header", containment: "body", scroll: false, snapMode: "outer" });
-            window.addEventListener('resize', onWindowResize, false);
-            try {
-                hiddenCanvas = document.createElement('canvas');
-                hiddenContext = hiddenCanvas.getContext('2d');
-
-                canvas = $("#canvas");
-                context = canvas[0].getContext("2d");
-                canvas.mousedown(function (event) { mousedown = true; mouseStartPos = { X: event.pageX, Y: event.pageY } });
-                canvas.mouseup(function () { mousedown = false; globalOffsetX = offsetX; globalOffsetY = offsetY; });
-                canvas.mousemove(function (event) {
-                    if (mousedown) {
-                        var dragOffsetX = globalOffsetX + (mouseStartPos.X - event.pageX) * -1;
-                        var dragOffsetY = globalOffsetY + (mouseStartPos.Y - event.pageY) * -1
-                        //offsetX = dragOffsetX < 0 ? dragOffsetX : offsetX;
-                        //offsetY = dragOffsetY < 0 ? dragOffsetY : offsetY;
-
-                        offsetX = dragOffsetX;
-                        offsetY = dragOffsetY;
-
-                        DrawMap();
-                    }
-                });
-
-                canvas[0].addEventListener("wheel", trackWheel);
-                canvas[0].addEventListener("wheel", trackMouse);
-                canvas[0].addEventListener("wheel", zoom);
-            }
-            catch (ex) {
-                alert(ex.message);
-            }
-        });
-
-        function zoom() {
-
-            context.setTransform(1, 0, 0, 1, 0, 0);
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.translate(global.zoom.origin.x, global.zoom.origin.y);
-            context.scale(global.zoom.scale, global.zoom.scale);
-            context.translate(-global.zoom.origin.x, -global.zoom.origin.y);
-
-            DrawMap();
-        }
-
-        function trackWheel(e) {
-            if (e.deltaY > 0) {
-                if (global.zoom.scale > 0.4) {
-                    global.zoom.scale *= 0.9;
-                }
-            } else {
-                if (global.zoom.scale < 2) {
-                    global.zoom.scale *= 1.1;
-                }
-            }
-            global.zoom.scale = parseFloat(global.zoom.scale.toFixed(2));
-        }
-
-        function trackMouse(e) {
-            //global.zoom.origin.x = document.body.scrollLeft + e.clientX;
-            //global.zoom.origin.y = document.body.scrollTop + e.clientY;
-            global.zoom.origin.x = e.pageX;
-            global.zoom.origin.y = e.pageY;
-        }
-
-        function polygon(ctx, x, y, radius, sides, color) {
-            if (sides < 3) return;
-            var a = ((Math.PI * 2) / sides);
-            ctx.beginPath();
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.translate(x, y);
-            ctx.moveTo(radius, 0);
-            for (var i = 1; i < sides; i++) {
-                ctx.lineTo(radius * Math.cos(a * i), radius * Math.sin(a * i));
-            }
-            ctx.fillStyle = color;
-            ctx.fill();
-            ctx.closePath();
-        }
-
     </script>
 </head>
 <body>

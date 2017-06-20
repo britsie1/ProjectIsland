@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IslandServer
+namespace GameServer
 {
     [HubName("ServerHub")]
     public class ServerHub : Hub
@@ -97,7 +97,7 @@ namespace IslandServer
         {
             try
             {
-                Form1.chromeBrowser.GetMainFrame().ExecuteJavaScriptAsync(script);
+                GameServerForm.ChromeBrowser.GetMainFrame().ExecuteJavaScriptAsync(script);
             }
             catch (Exception)
             { }
